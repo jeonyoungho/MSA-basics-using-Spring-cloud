@@ -51,3 +51,6 @@
 - RestTemplate을 활용하여 다른 서비스로 부터 HTTP통신을 통해 데이터를 받아옴
 - 마이크로서비스 아키텍처에서는 도메인의 중복을 어느 정도 허용함
 - 대신 API 스펙이 견고하게 됨, 한 MSA에서 다른 MSA를 호출할 때의 이슈사항을 각 팀들간의 커뮤니케이션을 통해 주고받음(API문서 관리가 중요함!)
+
+#### 출처
+- https://www.youtube.com/watch?v=mJMzV6GCmPw&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=2
