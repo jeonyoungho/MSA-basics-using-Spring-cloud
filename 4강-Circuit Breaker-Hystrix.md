@@ -128,15 +128,176 @@ public String recommendFallback() {
     - Product API에 응답 오류인경우, Default값을 넣어 주고 싶습니다
 - 결정 내용
     - Display -> Product 연동 구간에 Circuit Breaker를 적용 !
-- 실습 과정
+
+### 실습 과정
+
+#### 1. [display] build.gradle에 hystrix dependency추가
 ~~~
-1. [display] build.gradle에 hystrix dependency추가
 compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
-2. [display] DisplayApplication에 @EnableCircuitBreaker추가
+~~~
+
+#### 2. [display] DisplayApplication에 @EnableCircuitBreaker추가
+~~~
 @EnableCircuitBreaker
-3. [display] ProductRemoteServiceImp에 @HystrixCommand추가
+~~~
+
+#### 3. [display] ProductRemoteServiceImp에 @HystrixCommand추가
+~~~
 @HystrixCommand
 ~~~
+
+## [실습 Step-2] Hystrix Fallback 적용하기
+- Tag : step-2-hystrix-basic
+
+#### 4. [product] ProductController에서 항상 Exception 던지게 수정하기 (장애 상황 흉내)
+~~~
+throw new RuntimeException(“I/O Error”)
+~~~
+#### 5. [display] ProductRemoteServiceImp에 Fallback Method 작성하기
+
+- 예시
+~~~
+@Override
+@HystrixCommand(fallbackMethod = "getProductInfoFallback")
+public String getProductInfo(String productId) {
+    return this.restTemplate.getForObject(url + productId, String.class);
+}
+
+public String getProductInfoFallback(String productId) {
+    return "[ this product is sold out ]";
+}
+~~~
+
+
+#### 6. 확인
+- http://localhost:8082/products/22222
+- http://localhost:8081/displays/11111
+- Hystrix가 발생한 Exception을 잡아서 Fallback을 실행
+- Fallback 정의 여부와 상관없이 Circuit 오픈 여부 판단을 위한 에러통계는 계산하고 있음 아직, Circuit이 오픈된 상태 X
+(Tag : step-2-hystrix-fallback2)
+
+
+#### 7. Fallback 원인 출력하기
+- Fallback 메소드의 마지막 파라매터를 Throwable로 추가하면 Fallback 일으킨 Exception을 전달 해줌
+
+- 예시
+~~~
+public String getProductInfoFallback(String productId, Throwable t) {
+    System.out.println("t = " + t);
+    return "[ this product is sold out ]";
+}
+~~~
+
+#### 8. 정리
+- Hystrix에서 Fallback의 실행 여부는 Exception이 발생 했는가 여부
+- Fallback의 정의 여부는 Circuit Breaker Open과 무관
+Throwable 파래매터의 추가로. Fallback 원인을 알 수 있다
+
+## [실습 Step-2] Hystrix로 Timeout 처리하기
+- Tag : step-2-hystrix-timeout
+- Hystrix로 할 수 있는 또 한가지 ! Timeout 처리
+- @HystrixCommand로 표시된 메소드는 지정된 시간안에 반환되지 않으면 자동으로 Exception 발생 (기존 설정 : 1,000ms)
+
+### 실습 과정
+
+#### 1. [product] ProductController의 throw Exception을 Thread.sleep(2000)로 수정
+~~~
+@GetMapping(path = "{productId}")
+public String getProductInfo(@PathVariable String productId) {
+    try {
+        Thread.sleep(2000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
+    return "[product id = " + productId + " at " + System.currentTimeMillis() + "]";
+    //throw new RuntimeException("I/O Exception");
+}
+~~~
+
+#### 2. 확인
+- Product API를 직접 호출하는 경우는 동작하나, Display는 동작 안함
+- t = com.netflix.hystrix.exception.HystrixTimeoutException
+
+#### 3. [display] application.yml 수정하여 Hystrix Timeout 시간 조정하기
+- hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=3000
+
+~~~
+hystrix:
+  command:
+    default:    # command key. use 'default' for global setting.
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+~~~
+
+#### 4. 다시 확인 -> Product/Display 모두 동작
+#### 5. 정리
+- Hystrix를 통해 실행 되는 모든 메소드는 정해진 응답시간 내에 반환 되어야 한다
+- 그렇지 못한 경우, Exception이 발생하며, Fallback이 정의된 경우 수행된다
+- Timeout 시간은 조절할 수 있다 (Circuit 별로 세부 수정 가능하며 뒷 부분에 설명)
+- 언제 유용한가 ?
+    - <b>항상 !!</b>
+    - <b>모든 외부 연동은 최대 응답 시간을 가정할 수 있어야 한다</b>
+    - <b>실제 11번가는 DB타임아웃을 비롯하여 실제 MSA를 도입하면서 상당히 많은 부분에 적용하게 되었음, timeout에 민감해졌음</b>
+    - 여러 연동을 사용하는 경우 최대 응답시간을 직접 Control하는 것은 불가능하다 (다양한 timeout, 다양한 지연등..)
+
+## [실습 Step-2] Hystrix Circuit Open 테스트
+- Tag : step-2-hystrix-circuit-open
+
+#### 1. [display] application.yml 수정하여 Hystrix 프로퍼티 추가
+- 기본 설정 (테스트 하기 힘들다)
+- 10초동안 20개 이상의 호출이 발생 했을때 50% 이상의 호출에서 에러가 발생하면 Circuit Open
+~~~
+hystrix:
+  command:
+    default:    # command key. use 'default' for global setting.
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000   # default 1,000ms
+      circuitBreaker:
+        requestVolumeThreshold: 1   # Minimum number of request to calculate circuit breaker's health. default 20
+        errorThresholdPercentage: 50 # Error percentage to open circuit. default 50
+~~~
+
+- 변경설정
+    - h.c.d.circuitBreaker.requestVolumeThreshold: 1(1번의 request가 실패하면 무조건 circuit이 open되게 됨)
+    - h.c.d.circuitBreaker.errorThresholdPercentage: 50
+
+#### 2. [product] ProductController 다시 수정하여 Exception 던지도록 수정
+~~~
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+
+    @GetMapping(path = "{productId}")
+    public String getProductInfo(@PathVariable String productId) {
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return "[product id = " + productId + " at " + System.currentTimeMillis() + "]";
+        throw new RuntimeException("I/O Exception");
+    }
+}
+~~~
+- Thread.sleep(2000) 제거 - 테스트 편의
+- Throw new RuntimeException 복원 - Exception 발생으로 Circuit Open 유도하기 위해
+
+#### 3. 확인
+- http://localhost:8082/products/22222
+    - Exception 발생 확인
+- http://localhost:8081/displays/11111
+    - 10초 이상 호출. Exception 메세지 변경되었나 확인<br>
+    - ![1](https://user-images.githubusercontent.com/44339530/114968280-fe21e900-9eb0-11eb-8b8e-b3ea98365b44.png)<br>
+
+- Product Console 지운 후 Display 호출 및 확인
+    - 'Hystrix Circuit Short-Circuited and is OPEN”이 Display 에 출력되는 경우는 Product 콘솔에는 아무것도 찍히지 않는다
+    - -> Circuit Open (호출 차단)
 
 #### 출처
 - https://www.youtube.com/watch?v=iHHuYGdG_Yk&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=4
