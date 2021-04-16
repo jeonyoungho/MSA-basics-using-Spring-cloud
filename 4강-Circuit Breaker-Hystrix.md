@@ -299,6 +299,131 @@ public class ProductController {
     - 'Hystrix Circuit Short-Circuited and is OPEN”이 Display 에 출력되는 경우는 Product 콘솔에는 아무것도 찍히지 않는다
     - -> Circuit Open (호출 차단)
 
+#### 4. 부가 설명
+- Circuit Open 여부는 통계를 기반으로 한다
+- 최근 10초간 호출 통계 (metrics.rollingStats.timeInMilliseconds : 10000)
+- 최소 요청 갯수(20) 넘는 경우만(circuitBreaker.requestVolumeThreshold : 20)
+- 에러 비율 넘는 경우(50%) (circuitBreaker.errorThresholdPercentage : 50)
+- 한번 Circuit이 오픈되면 5초간 호출이 차단되며, 5초 경과후 단 “1개”의 호출을 허용하며 (Half-Open), 이것이 성공하면 Circuit을 다시 CLOSE하고, 여전히 실패하면 Open이 5초 연장된다
+(circuitBreaker.sleepWindowInMilliseconds : 5000)
+
+
+## [실습 Step-2] Hystrix Circuit Breaker의 단위 확인하기
+- Tag : step-2-hystrix-command-key
+    - Circuit Breaker의 단위 ?
+    - 에러 비율을 통계의 단위
+    - Circuit Open / Close가 함께 적용되는 단위
+    - 즉, A 메소드와 B 메소드가 같은 Circuit Breaker를 사용한다면, A와 B의 에러 비율이 함께 통계내어지고, Circuit이 오픈되면 함께 차단된다
+
+- Circuit의 지정은 ?
+    - commandKey라는 프로퍼티로 지정 가능
+    - @HystrixCommand에서는 지정하지 않는 경우 메소드 이름 사용
+    - 이렇게 사용하지 말것 !
+    - 메소드 이름은 겹칠 수 있으며, 나중에 나오는 Feign의 경우 또 다르기 때문에 헷갈릴 수 있다
+    - 항상 직접 지정 해서 사용하기
+
+#### 1. [display] commandKey 부여하기
+~~~
+@Override
+@HystrixCommand(commandKey = "productInfo", fallbackMethod = "getProductInfoFallback")
+public String getProductInfo(String productId) {
+    return this.restTemplate.getForObject(url + productId, String.class);
+}
+~~~
+
+#### 2. [display] application.yml에 commandKey로 속성 지정해보기
+~~~
+hystrix:
+  command:
+    default:    # command key. use 'default' for global setting.
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000   # default 1,000ms
+      circuitBreaker:
+        requestVolumeThreshold: 1   # Minimum number of request to calculate circuit breaker's health. default 20
+        errorThresholdPercentage: 50 # Error percentage to open circuit. default 50
+~~~
+- default : global 설정. 
+- 이 위치에 commandKey값을 넣으면, 해당 Circuit Breaker에만 해당 속성 적용된다
+
+## Hystrix - Circuit Breaker
+- Hystrix를 쓴다는 것의 또다른 의미
+    - Hystrix를 통해 실행한다는 것은 별도의 Thread Pool에서 내 Code를 실행한다는 것
+    - ThreadPool을 여러개의 Circuit Breaker가 공유할 수 있다
+- ThreadPool 사용을 통해서 얻을 수 있는 것
+    - 내 시스템의 Resource가 다양한 기능(서비스)들을 위해 골고루 분배 될 수 있도록<br>
+![2](https://user-images.githubusercontent.com/44339530/114969548-8c976a00-9eb3-11eb-8e32-05b1a5334049.png)<br>
+
+### 동시에 실행될 수 있는 Command의 갯수 제한 - ThreadPool 설정
+- HystrixCommand로 선언된 Method는 default로 호출한 Thread가 아닌 별도의 ThreadPool에서 '대신' 실행된다
+- ThreadPool에 대한 설정을 하지 않으면 Default로는 @HystrixCommand가 선언된 클래스 이름이 ThreadPool 이름으로 사용된다
+
+~~~
+public class MySerice {
+    @HystrixCommand(commandKey = 'serviceA')
+    public String anyMethodWithExternalDependency1() {
+        URI uri = URI.create("http://172.32.1.22:8090/recommended");
+        String result = this.restTemplate.getForObject(uri, String.class);
+        return result;
+    }
+
+    @HystrixCommand(commandKey = 'serviceB')
+    public String anyMethodWithExternalDependency2() {
+        URI uri = URI.create("http://172.32.2.33:8090/search");
+        String result = this.restTemplate.getForObject(uri, String.class);
+        return result;
+    }
+}
+~~~
+
+- <b>위의 같은 경우 두개의 메소드는 각각 Circuit Breaker를 갖지만, 두개의 Command가 'MyService'라는 하나의 ThreadPool에서 수행됨</b>
+
+### ThreadPool의 세부 옵션 설정
+~~~
+@HystrixCommand(commandKey = 'ExtDep1', fallbackMethod='recommendFallback', commandGroupKey = 'Myservice1', commandProperties = {
+  @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500")
+},
+threadPoolProperties = {
+  @HystrixProperty(name = "coreSize", value = "30"),
+  @HystrixProperty(name = "maxQueueSize", value = "101"),
+  @HystrixProperty(name = "keepAliveTimeMinutes", value = "2"),
+  @HystrixProperty(name = "queueSizeRejectionThreshold", value = "15"),
+  @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "12"),
+  @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value ="1440")
+}
+~~~
+
+- Hystrix에 관한 모든 세부 옵션 : https://github.com/Netflix/Hystrix/wiki/ Configuration
+- <b>ThreadPool의 기본 사이즈는 10이므로 적용시 필히 상향 여부 검토 필요</b>
+
+### Project에 적용 하기
+- Spring Boot 프로젝트인 경우
+    - Spring Cloud Dependency 추가 와 @EnableHystrix 주석
+- Spring 프로젝트인 경우 혹은 AOP 사용 가능한 경우
+    - Netflix Hystrix-Javanica
+    - https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/ hystrix- javanica
+- 기타 Java Project인 경우
+    - (Pure) Netflix Hystrix
+    - 주석 없이 Coding으로 가능
+    - https://github.com/Netflix/Hystrix
+~~~
+public class CommandHelloWorld extends HystrixCommand<String> {
+
+    private final String name;
+
+    public CommandHelloWorld(String name) {
+        super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"));
+        this.name = name;
+    }
+
+    @Override
+    protected String run() {
+        return "Hello " + name + "!";
+    }
+}
+~~~
+
 #### 출처
 - https://www.youtube.com/watch?v=iHHuYGdG_Yk&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=4
 - https://freedeveloper.tistory.com/435?category=919480
