@@ -112,6 +112,11 @@ class ServiceInstanceRestController {
 - Main Class : @EnableEurekaServer
 
 #### 3. [eurekaserver] 서버 실행
+- jdk11은 다음 jaxb 디펜던시를 별도로 추가해줘야함
+~~~
+// https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
+    implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.1'
+~~~
 - EurekaServerApplication 실행
 - http://localhost:8761/ 확인(eureka서버에서 제공해주는 대쉬보드)<br>
 ![2](https://user-images.githubusercontent.com/44339530/114975277-ebaeac00-9ebe-11eb-87fd-90f1bdd6bed5.png)<br>
