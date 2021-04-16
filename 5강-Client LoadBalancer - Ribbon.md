@@ -130,3 +130,6 @@ product:
 - Ribbon에는 Retry기능이 내장 되어있다
 - Eureka와 함께 사용될 때 강력하다 (뒤에 실습)
 
+#### 출처
+- https://www.youtube.com/watch?v=K4laj5cDYLg&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=5
+- https://freedeveloper.tistory.com/436?category=919480
