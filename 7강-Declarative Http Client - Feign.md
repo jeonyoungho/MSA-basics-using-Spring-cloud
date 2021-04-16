@@ -227,7 +227,7 @@ public class FeignProductRemoteServiceFallbackFactory implements FallbackFactory
 
 #### 8. [display] Feign용 Hystrix Fallback 명시
 ~~~
-@FeignClient(name = "product", fallback = FeignProductRemoteServiceFallbackImpl.class)
+@FeignClient(name = "product", fallbackFactory = FeignProductRemoteServiceFallbackFactory.class)
 public interface FeignProductRemoteService {
     @RequestMapping(path = "/products/{productId}")
     String getProductInfo(@PathVariable("productId") String productId);
