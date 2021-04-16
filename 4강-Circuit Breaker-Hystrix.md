@@ -1,4 +1,5 @@
 # 4강-Circuit Breaker-Hystrix
+#### 유튜브 영상: https://www.youtube.com/watch?v=iHHuYGdG_Yk&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=4
 
 ## Netflix OSS
 - 50개 이상의 사내 프로젝트를 오픈소스로 공개
@@ -425,5 +426,4 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 ~~~
 
 #### 출처
-- https://www.youtube.com/watch?v=iHHuYGdG_Yk&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=4
 - https://freedeveloper.tistory.com/435?category=919480

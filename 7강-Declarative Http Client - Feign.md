@@ -1,4 +1,5 @@
 # 7강-Declarative Http Client - Feign
+#### 유튜브 영상: https://www.youtube.com/watch?v=SOmn6BGL884&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=7
 
 ## Declarative Http Client - Feign
 - Interface 선언을 통해 자동으로 Http Client 를 생성
@@ -276,5 +277,4 @@ hystrix:
         - Hystrix - 해당 API 를 호출하는 Circuit Breaker 오픈 Fallback, Timeout 도 동작<br>
 
 #### 출처
-- https://www.youtube.com/watch?v=SOmn6BGL884&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=7
 - https://freedeveloper.tistory.com/438?category=919480

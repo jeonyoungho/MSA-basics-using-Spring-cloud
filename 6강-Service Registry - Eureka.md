@@ -1,4 +1,5 @@
 # 6강-Service Registry - Eureka
+#### 유튜브 영상: https://www.youtube.com/watch?v=iIqamVxYmUk&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=6
 
 - Ribbon 예제에서 서버 목록을 yml에 직접 넣었는데 자동화 할 방법은 ?
     - '서버가 새롭게 시작되면 그것을 감지하여 목록에 자동으로 추가되고, 서버가 종료되면 자동으로 목록에서 삭제하기 위한 방법은 없을까?'
@@ -226,5 +227,4 @@ eureka:
 - <b>예를 들어, product의 어떤 서비스를 호출해야 한다 했을 때 유레카 서버를 통해서 호출하는 개념이 아닌 유레카 서버에서 전체 레지스트리 목록을 30초에 한 번씩 가져와 메모리에 저장 후 클라이언트 loadbalancing을 하는 ribbon이 discover client를 통해서 이 product라는 application이름을 해당url로 변경을 하게됨. 그러기에 client side loadbalancing이 가능해지고 실제로 eureka서버를 통하는게 아니라 부하 걱정할 필요도 없음.</b>
 
 #### 출처
-- https://www.youtube.com/watch?v=iIqamVxYmUk&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=6
 - https://freedeveloper.tistory.com/437?category=919480

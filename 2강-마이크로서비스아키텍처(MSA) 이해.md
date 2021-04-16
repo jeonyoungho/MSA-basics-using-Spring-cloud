@@ -1,4 +1,5 @@
 # 2강-마이크로서비스아키텍처(MSA) 이해
+#### 유튜브 영상: https://www.youtube.com/watch?v=mJMzV6GCmPw&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=2
 
 ## MSA를 알아보기 전에
 - MSA란 시스템을 여러 개의 독립된 서비스로 나눠서, 이 서비스를 조합함으로서 기능을 제공하는 아키텍쳐 디자인 패턴
@@ -53,5 +54,4 @@
 - 대신 API 스펙이 견고하게 됨, 한 MSA에서 다른 MSA를 호출할 때의 이슈사항을 각 팀들간의 커뮤니케이션을 통해 주고받음(API문서 관리가 중요함!)
 
 #### 출처
-- https://www.youtube.com/watch?v=mJMzV6GCmPw&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=2
 - https://freedeveloper.tistory.com/435?category=919480

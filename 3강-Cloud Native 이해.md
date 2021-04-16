@@ -1,4 +1,5 @@
 # 3강-Cloud Native 이해
+#### 유튜브 영상: https://www.youtube.com/watch?v=NQcOwOI7nl0&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=3
 
 ## Cloud Native란?
 - '클라우드 네이티브'의 핵심은 애플리케이션을 어떻게 만들고 배포하는지에 있으며 위치는 중요하지 않다.
@@ -144,5 +145,4 @@
 - 정말 큰 서비스가 아니라면 모놀리틱도 NOSQL을 도입한다든가 캐쉬를 사용한다든가 해서 성능을 충분히 높일 수 있음
 
 #### 출처
-- https://www.youtube.com/watch?v=NQcOwOI7nl0&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=3
 - https://freedeveloper.tistory.com/435?category=919480

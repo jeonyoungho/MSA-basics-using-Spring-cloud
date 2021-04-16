@@ -1,4 +1,5 @@
 # Coniguration Server, Tracing, Monitoring, 그리고 남은 이야기..
+#### 유튜브 영상(25분23초 부터): https://www.youtube.com/watch?v=6g1wH97BiuQ&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=8
 
 ## Spring Cloud Config
 
@@ -35,5 +36,4 @@
 
 #### 출처
 - https://freedeveloper.tistory.com/440?category=919480
-- https://www.youtube.com/watch?v=6g1wH97BiuQ&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=8
 

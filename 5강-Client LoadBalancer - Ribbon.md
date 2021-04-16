@@ -1,4 +1,5 @@
 # 5강-Client LoadBalancer - Ribbon
+#### 유튜브 영상: https://www.youtube.com/watch?v=K4laj5cDYLg&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=5
 
 ## Server Side LoadBalancer
 - 일반적인 L4 Switch 기반의 Load Balancing
@@ -131,5 +132,4 @@ product:
 - Eureka와 함께 사용될 때 강력하다 (뒤에 실습)
 
 #### 출처
-- https://www.youtube.com/watch?v=K4laj5cDYLg&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=5
 - https://freedeveloper.tistory.com/436?category=919480

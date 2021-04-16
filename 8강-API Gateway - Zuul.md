@@ -1,4 +1,5 @@
 # 8강-API Gateway - Zuul
+#### 유튜브 영상: https://www.youtube.com/watch?v=6g1wH97BiuQ&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=8
 
 ## API Gateway
 - 클라이언트와 백엔드 서버 사이의 출입문(front door)
@@ -208,5 +209,4 @@ display:
     - 에러들을 정형화된 에러로 에러 필터를 통해서 사용자들에게 내보내주고 있기도함
 
 #### 출처
-- https://www.youtube.com/watch?v=6g1wH97BiuQ&list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5&index=8
 - https://freedeveloper.tistory.com/439?category=919480
