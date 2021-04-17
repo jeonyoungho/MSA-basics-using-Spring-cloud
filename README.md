@@ -1,6 +1,6 @@
 # MSA-basics-using-Spring-cloud
 - SKplanet Tacademy에서 제공하는 "Netflix OSS, Spring Cloud를 활용한 MSA기초" 강의를 수강 후 정리하는 내용입니다.
-#### 유튜브 영상: https://www.youtube.com/playlist?list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5
+- 유튜브 영상: https://www.youtube.com/playlist?list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5
 
 ## 강의 목표
 - 모놀리틱이 나온 배경과 아키텍쳐를 이해한다.
