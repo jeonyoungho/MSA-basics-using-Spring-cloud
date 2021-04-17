@@ -1,4 +1,5 @@
 # MSA-basics-using-Spring-cloud
+#### 유튜브 영상: https://www.youtube.com/playlist?list=PL9mhQYIlKEhdtYdxxZ6hZeb0va2Gm17A5
 - SKplanet Tacademy에서 제공하는 "Netflix OSS, Spring Cloud를 활용한 MSA기초" 강의를 수강 후 정리하는 내용입니다.
 
 ## 강의 목표
