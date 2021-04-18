@@ -14,6 +14,14 @@
 - 특정 단계에서 실습에 못 따라 오시더라도 각 단계별로 'tag'를 부여해 놨으니 checkout해서 시작하면 됨
 - 강의 참고 블로그: https://freedeveloper.tistory.com/category/SpringCloud
 
+## 추가로 공부해야 될 것들
+- Spring Cloud Config (x)
+- Logging 중앙화 (x)
+- Hystrix의 내부 구성 및 실제 동작과정(x)
+- Turbine(x)
+- Zipkin(x)
+- RestTemplate 보다 Feign이 더 뛰어난 점(x)
+
 ## MSA관련 실습 참고 예제 사이트
 - https://earlgreybutter.tistory.com/222
 - https://daddyprogrammer.org/post/4347/spring-cloud-msa-configuration-server/
