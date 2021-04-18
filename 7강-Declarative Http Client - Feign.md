@@ -234,7 +234,7 @@ public interface FeignProductRemoteService {
     String getProductInfo(@PathVariable("productId") String productId);
 }
 ~~~
-- @FeignClient에 fallback 속성으로 클래스 명시
+- @FeignClient에 fallbackFactory 속성 설정
 
 #### 9. [display] Feign용 Hystrix 프로퍼티 정의하는 법
 ~~~

@@ -59,7 +59,7 @@
 - Ribbon + Eureka 조합을 통해
     - 현재 서비스가 가능한 서버의 목록을 자동으로 수신
 - Ribbon의 Retry 기능을 통해
-    - 동일한 종류의 서버들로의 자동 재시도가 가능<br>
+    - 같은 서비스를 제공하는 다른 서버들로 자동 재시도 가능<br>
 ![11](https://user-images.githubusercontent.com/44339530/114998407-e4e26200-9edb-11eb-8c78-e5f428481d30.png)<br>
 
 ## [실습 Step-6] Spring Cloud Zuul
@@ -182,8 +182,8 @@ display:
     - <b>spring-cloud를 생태계에서 spring-cloud-config가 엄청 중요함(나중에 꼭 찾아볼 것)</b>
 
 - 세마포어를 쓰게 되면 서블릿 스레드가 작업(hystricx command에 있는 메소드)을 하기전에 그냥 count만 하는 것임, 서블릿 스레드가 200개라도 세마포어가 5라면 토탈 5개만 실행을 할 수 있게 됨
-- <b>세마포어는 network timeout 을 격리시켜주지 못하기에 11번가는 스레드풀을로 바꿨음</b>
-- 사용할 떄 스레드풀을 선택할지 세마포어를 선택할지 결정해야함
+- <b>세마포어는 network timeout 을 격리시켜주지 못하기에 11번가는 스레드풀로 바꿨음</b>
+- 사용할 때 스레드풀을 선택할지 세마포어를 선택할지 결정해야함
     - 세마포어가 성능상에선 더 좋음(아무래도 스레드를 생성하는 비용이 없어지기에), 하지만 timeout을 하지못하기에 유의해야함<br>
 
 ![13](https://user-images.githubusercontent.com/44339530/115004467-ca12ec00-9ee1-11eb-8c5a-1284eb94d995.png)<br>

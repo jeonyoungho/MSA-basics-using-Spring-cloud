@@ -19,7 +19,7 @@
 
 - Registry-aware HTTP Client: Ribbon
 - ribbon이 eureka를 통해서 주기적으로 서버 목록을 갖고오고 eureka는 서버목록을 로컬에 저장하고 있음
-- Ribbon은 Eureka과 결합하여 사용 할 수 있으며 서버 목록을 자동으로 관리
+- ribbon은 Eureka과 결합하여 사용 할 수 있으며 서버 목록을 자동으로 관리
 
 ## Eureka Server(Registry) 만들기
 ~~~
@@ -204,15 +204,15 @@ eureka:
     - Display -> Product 호출시에 Eureka를 적용하여 <b>ip주소를 코드나 설정 '모두'에서 제거</b>하려고 함
 
 #### 1. display서비스의 application.yml 변경 (주석 처리)
-    ~~~
-    product:
-    ribbon:
-        #listOfServers: localhost:8082,localhost:7777  
-        MaxAutoRetries: 0
-        MaxAutoRetriesNextServer: 1
-    ~~~
-    - product.ribbon.listOfServers 제거
-    - 서버 주소는 Eureka Server에서 가져와라!
+~~~
+product:
+ribbon:
+    #listOfServers: localhost:8082,localhost:7777  
+    MaxAutoRetries: 0
+    MaxAutoRetriesNextServer: 1
+~~~
+- product.ribbon.listOfServers 제거
+- 서버 주소는 Eureka Server에서 가져와라!
 
 #### 2. [확인]display 서버 재시작
 - http://localhost:8081/displays/11111
@@ -224,7 +224,7 @@ eureka:
 - <b>Eureka Client가 설정되면, 코드상에서 서버 주소 대신 Application 이름을 명시해서 호출 가능</b>
 - <b>Ribbon의 Load Balancing과 Retry가 함께 동작</b>
 - <b>Eureka클라이언트가 혁신적이고 좋은 부분은 클라이언트가 서버리스트를 30초에 한 번씩 로컬에다 계속 동기화한다는 것이다.</b>
-- <b>예를 들어, product의 어떤 서비스를 호출해야 한다 했을 때 유레카 서버를 통해서 호출하는 개념이 아닌 유레카 서버에서 전체 레지스트리 목록을 30초에 한 번씩 가져와 메모리에 저장 후 클라이언트 loadbalancing을 하는 ribbon이 discover client를 통해서 이 product라는 application이름을 해당url로 변경을 하게됨. 그러기에 client side loadbalancing이 가능해지고 실제로 eureka서버를 통하는게 아니라 부하 걱정할 필요도 없음.</b>
+- <b>예를 들어, product의 어떤 서비스를 호출해야 한다 했을 때 유레카 서버를 통해서 호출하는 개념이 아닌 유레카 서버에서 전체 레지스트리 목록을 30초에 한 번씩 가져와 메모리에 저장 후 클라이언트 loadbalancing을 하는 ribbon이 DiscoveryClient를 통해서 이 product라는 application이름을 해당url로 변경을 하게됨. 그러기에 client side loadbalancing이 가능해지고 실제로 eureka서버를 통하는게 아니라 부하 걱정할 필요도 없음.</b>
 
 #### 출처
 - https://freedeveloper.tistory.com/437?category=919480

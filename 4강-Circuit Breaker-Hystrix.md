@@ -114,7 +114,7 @@ public String recommendFallback() {
 #### Circuit Breaker의 Flow chart
 <img width="556" alt="스크린샷 2021-04-15 오후 8 48 07" src="https://user-images.githubusercontent.com/44339530/114864375-e3f1f780-9e2b-11eb-8156-61c4718ad693.png"><br>
 
-- 동기든 비동기 요청이 들어오면(1) Hystrixcommand로 받는데 현장 상태가 circuit이 open된 상태(3: short circuit)라면 getFallback()메소드를 호출하여 바로 리턴하게 됨
+- 동기든 비동기든, 요청이 들어오면(1) Hystrixcommand로 받는데 현장 상태가 circuit이 open된 상태(3: short circuit)라면 getFallback()메소드를 호출하여 바로 리턴하게 됨
 - 만약 circuit이 open된 상태가 아니더라도 스레드 풀 크기나 세마포어 부분이 꽉찼다면 동일하게 getFallback()메소드를 호출하여 바로 리턴하게 됨
 - 위의 상황들이 아니라면 run(5)이 실행되는 이 과정속에서 timeout이 발생하면 fallback실행(5a)
 - run이 실행 후 404나 exception이 발생한다면 fallback이 실행되고 성공한다면 정상적으로 리턴된다. 위와 같은 결과는 모두 통계로 수집되어 현재 circuit이 open되어야하는지 판단이 내려진다.
@@ -179,7 +179,7 @@ public String getProductInfoFallback(String productId) {
 
 
 #### 7. Fallback 원인 출력하기
-- Fallback 메소드의 마지막 파라매터를 Throwable로 추가하면 Fallback 일으킨 Exception을 전달 해줌
+- Fallback 메소드의 마지막 파라미터로 Throwable를 추가하면 Fallback 일으킨 Exception을 전달 해줌
 
 - 예시
 ~~~
@@ -190,9 +190,9 @@ public String getProductInfoFallback(String productId, Throwable t) {
 ~~~
 
 #### 8. 정리
-- Hystrix에서 Fallback의 실행 여부는 Exception이 발생 했는가 여부
-- Fallback의 정의 여부는 Circuit Breaker Open과 무관
-Throwable 파래매터의 추가로. Fallback 원인을 알 수 있다
+- Hystrix에서 Fallback의 실행 여부는 Exception이 발생 했는가의 여부
+- Fallback의 정의 여부는 Circuit Breaker Open과 무관하고
+Throwable 파라미터의 추가로 Fallback 원인을 알 수 있다.
 
 ## [실습 Step-2] Hystrix로 Timeout 처리하기
 - Tag : step-2-hystrix-timeout
@@ -395,15 +395,15 @@ threadPoolProperties = {
 }
 ~~~
 
-- Hystrix에 관한 모든 세부 옵션 : https://github.com/Netflix/Hystrix/wiki/ Configuration
+- Hystrix에 관한 모든 세부 옵션 : https://github.com/Netflix/Hystrix/wiki/Configuration
 - <b>ThreadPool의 기본 사이즈는 10이므로 적용시 필히 상향 여부 검토 필요</b>
 
 ### Project에 적용 하기
 - Spring Boot 프로젝트인 경우
-    - Spring Cloud Dependency 추가 와 @EnableHystrix 주석
+    - Spring Cloud Dependency 추가 와 @EnableHystrix 주석 추가
 - Spring 프로젝트인 경우 혹은 AOP 사용 가능한 경우
     - Netflix Hystrix-Javanica
-    - https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/ hystrix- javanica
+    - https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix- javanica
 - 기타 Java Project인 경우
     - (Pure) Netflix Hystrix
     - 주석 없이 Coding으로 가능

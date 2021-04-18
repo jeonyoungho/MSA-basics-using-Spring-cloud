@@ -18,7 +18,7 @@
 - Ribbobn 의 장점 (단점도 있지만... )
     - H/W 가 필요 없이 S/W 로만 가능 (비용 down, 유연성 up)
     - 서버 목록의 동적 변경이 자유로움 (단 Coding 필요)
-    - Load Balancing Schema 이 마음대로 구성 가능 (단 Coding 필요)<br>
+    - Load Balancing Schema를 마음대로 구성 가능 (단 Coding 필요)<br>
 ![4](https://user-images.githubusercontent.com/44339530/114970570-a76ade00-9eb5-11eb-941c-51bfe916edd4.png)<br>
 
 ## [실습 Step-3] RestTemplate에 Ribbon 적용하기
@@ -121,7 +121,7 @@ product:
 (Hystrix로 Ribbon을 감싸서 호출한 상태이기 때문에)</b>
 - Retry를 끄거나, 재시도 횟수를 0으로 하여도 해당 서버로의 호출이 항상 동일한 비율로 실패하지는 않는다
 (실패한 서버로의 호출은 특정 시간동안 Skip 되고 그 간격은 조정된다 - BackOff)
-- <b>classpath 에 retry 가 존재해야 한다는 점 주의</b>
+- <b>classpath 에 retry가 존재해야 한다는 점 주의</b>
 - <b>ribbon의 rule을 netflix에서 irule이라해서 별도로 제공해줌</b>
 - <b>많은 테스트가 필요</b>
 
