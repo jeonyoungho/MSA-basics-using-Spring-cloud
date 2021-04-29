@@ -74,7 +74,7 @@ git checkout tags/step-6-zuul-baseline -b my-step-6
 
 #### 2. [zuul] Zuul 과 Eureka 디펜던시 추가 (build.gradle)
 ~~~
-compile('org.springframework.cloud:spring-cloud-starter-netflix- zuul')
+compile('org.springframework.cloud:spring-cloud-starter-netflix-zuul')
 compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
 compile('org.springframework.retry:spring-retry:1.2.2.RELEASE')
 ~~~
