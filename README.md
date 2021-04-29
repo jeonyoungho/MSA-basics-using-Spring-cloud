@@ -15,12 +15,12 @@
 - 강의 참고 블로그: https://freedeveloper.tistory.com/category/SpringCloud
 
 ## 추가로 공부해야 될 것들
-- Spring Cloud Config (x)
-- Logging 중앙화 (x)
-- Hystrix의 내부 구성 및 실제 동작과정(x)
-- Turbine(x)
-- Zipkin(x)
-- RestTemplate 보다 Feign이 더 뛰어난 점(x)
+- Spring Cloud Config
+- Logging 중앙화
+- Hystrix의 내부 구성 및 실제 동작과정
+- Turbine
+- Zipkin
+- RestTemplate 보다 Feign이 더 뛰어난 점
 
 ## MSA관련 실습 참고 예제 사이트
 - https://earlgreybutter.tistory.com/222
