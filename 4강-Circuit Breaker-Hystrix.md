@@ -154,7 +154,7 @@ compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
 ~~~
 throw new RuntimeException(“I/O Error”)
 ~~~
-#### 5. [display] ProductRemoteServiceImp에 Fallback Method 작성하기
+#### 5. [display] ProductRemoteServiceImpl에 Fallback Method 작성하기
 
 - 예시
 ~~~
@@ -403,7 +403,7 @@ threadPoolProperties = {
     - Spring Cloud Dependency 추가 와 @EnableHystrix 주석 추가
 - Spring 프로젝트인 경우 혹은 AOP 사용 가능한 경우
     - Netflix Hystrix-Javanica
-    - https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix- javanica
+    - https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-javanica
 - 기타 Java Project인 경우
     - (Pure) Netflix Hystrix
     - 주석 없이 Coding으로 가능
